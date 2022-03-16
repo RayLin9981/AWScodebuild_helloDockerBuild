@@ -1,0 +1,46 @@
+version: 0.2
+
+#env:
+  #variables:
+     # key: "value"
+     # key: "value"
+  #parameter-store:
+     # key: "value"
+     # key: "value"
+  #secrets-manager:
+     # key: secret-id:json-key:version-stage:version-id
+     # key: secret-id:json-key:version-stage:version-id
+  #exported-variables:
+     # - variable
+     # - variable
+  #git-credential-helper: yes
+#batch:
+  #fast-fail: true
+  #build-list:
+  #build-matrix:
+  #build-graph:
+phases:
+  #install:
+    #如果使用 Ubuntu 標準映像 2.0 或更新版本，您必須指定執行時間版本。
+    #如果指定執行時間版本且使用非 Ubuntu 標準映像 2.0 的映像，建置會失敗。
+    #runtime-versions:
+      # name: version
+      # name: version
+    #commands:
+      # - command
+      # - command
+  pre_build:
+    commands:
+      - docker --version
+      - docker load < nginx_alpine.tar
+      # 因為從 dockerhub 拉會被擋，所以現在先放在 github 上
+  build:
+    commands:
+      - docker build -t raylin9981/mynginx:0.0.2 .
+      - docker images
+  post_build:
+    commands:
+    # 上傳至 dockerhub, 要新增 username 與 password 至環境變數
+    # 但密碼這樣存好恐怖，可能要用 AWS service Manager 比較好
+      - docker login -u ${username} -p ${password}
+      - docker push raylin9981/mynginx:0.0.2
