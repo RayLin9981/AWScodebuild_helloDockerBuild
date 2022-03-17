@@ -32,12 +32,12 @@ phases:
   pre_build:
     commands:
       - docker --version
-      - docker load < nginx_alpine.tar
+      # - docker load < nginx_alpine.tar
       # 因為從 dockerhub 拉會被擋，所以現在先放在 github 上
+      # 改到 quay 自己的儲存庫了
   build:
     commands:
       - docker build -t quay.io/raylin9981/mynginx:codebuild .
-      - docker pull quay.io/raylin9981/mynginx:0.0.1
       - docker images
   post_build:
     commands:
@@ -45,3 +45,8 @@ phases:
     # 但密碼這樣存好恐怖，可能要用 AWS service Manager 比較好
       - docker login quay.io -u ${username} -p ${password}
       - docker push quay.io/raylin9981/mynginx:codebuild
+      - printf '[{"name":"mynginx_from_quay","imageUri":"quay.io/raylin9981/mynginx:codebuild"}]' > imagedefinitions.json
+
+artifacts:
+  files:
+    - 'imagedefinitions.json'
