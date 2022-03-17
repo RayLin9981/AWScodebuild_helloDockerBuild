@@ -36,11 +36,12 @@ phases:
       # 因為從 dockerhub 拉會被擋，所以現在先放在 github 上
   build:
     commands:
-      - docker build -t raylin9981/mynginx:0.0.2 .
+      - docker build -t quay.io/raylin9981/mynginx:codebuild .
+      - docker pull quay.io/raylin9981/mynginx:0.0.1
       - docker images
   post_build:
     commands:
     # 上傳至 dockerhub, 要新增 username 與 password 至環境變數
     # 但密碼這樣存好恐怖，可能要用 AWS service Manager 比較好
-      - docker login -u ${username} -p ${password}
-      - docker push raylin9981/mynginx:0.0.2
+      - docker login quay.io -u ${username} -p ${password}
+      - docker push quay.io/raylin9981/mynginx:codebuild
