@@ -1,2 +1,8 @@
-# 測試
-很簡單的測試，看能不能透過修改 index.html 然後產生新 images
+# 基礎 AWS CICD Pipeline 測試
+
+source (github) -> build (AWS codeBuild) -> deploy (AWS ECS)
+
+## AWS codeBuild 部分
+很簡單的測試，看能不能透過修改 index.html 然後 build images
+目前 docker hub 會有 pull 的流量限制，因此我把 image 放在 quay.io 上 ( quay.io/raylin9981 )
+codeBuild 需要丟出一個 Artifacts 供 CodePipeline 使用 (`imagedefinitions.json`) (應該說是給 AWS ECS 使用) ，
